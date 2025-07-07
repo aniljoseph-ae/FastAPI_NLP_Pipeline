@@ -1,12 +1,18 @@
 import aiohttp
-import json
 import logging
+from app.api.v1.schemas import WebhookInput
+
+logger = logging.getLogger("nlp_pipeline")
 
 async def notify_webhook(webhook_url: str, payload: dict):
-    async with aiohttp.ClientSession() as session:
-        try:
-            async with session.post(webhook_url, json=payload) as response:
+    """Send webhook notification with validated payload."""
+    try:
+        webhook_input = WebhookInput(**payload)
+        async with aiohttp.ClientSession() as session:
+            async with session.post(webhook_url, json=webhook_input.dict()) as response:
                 if response.status != 200:
-                    logging.error(f"Webhook notification failed: {response.status}")
-        except Exception as e:
-            logging.error(f"Webhook notification error: {str(e)}")
+                    logger.error(f"Webhook notification failed: {response.status}")
+                else:
+                    logger.info(f"Webhook notification sent to {webhook_url}")
+    except Exception as e:
+        logger.error(f"Webhook notification error: {str(e)}")

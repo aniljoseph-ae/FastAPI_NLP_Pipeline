@@ -1,15 +1,13 @@
 from openai import OpenAI
-from app.core.config import Settings
+from app.core.config import settings  # Fixed capitalization
 
-def generate_embedding(text: str) -> str:
+def generate_embedding(text: str) -> list:  # Fixed return type
     client = OpenAI(
-        api_key=Settings.API_KEY,
-        base_url=Settings.ULTRASAFE_API_URL
+        api_key=settings.API_KEY,
+        base_url=settings.ULTRASAFE_API_URL
     )
-
     response = client.embeddings.create(
         input=text,
-        model=Settings.EMBEDDING_MODEL
+        model=settings.EMBEDDING_MODEL
     )
-
     return response.data[0].embedding
