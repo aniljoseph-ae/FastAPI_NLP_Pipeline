@@ -1,0 +1,13 @@
+fastapi == 0.103.0
+uvicorn
+pydantic
+openai
+lanchain
+weaviate-client
+sentence-transformer
+redis
+celery
+aiohttp
+mlflow
+python-dotenv
+pytest
